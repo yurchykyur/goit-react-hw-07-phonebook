@@ -1,46 +1,37 @@
-import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import { nanoid } from 'nanoid';
 
 import {
   FormWrapper,
-  ContactSubmitForm,
   FormInputLabel,
-  FormInput,
   FormSubmitBtn,
+  StyledForm,
+  StyledField,
+  StyledErrorMessage,
 } from './ContactForm.styled';
 
 import { createContact } from 'components/redux/contacts/contactSlice';
 
+const addContactSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(2, 'Too Short!')
+    .max(70, 'Too Long!')
+    .required('A name is required'),
+  number: Yup.number()
+    .integer("A phone number can't include a decimal point")
+    .positive("A phone number can't start with a minus")
+    .required('A phone number is required'),
+});
+
 export default function ContactForm() {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
   const contacts = useSelector(state => state.contacts);
   const dispatch = useDispatch();
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
-      case 'number':
-        setNumber(value);
-        break;
-      default:
-        return;
-    }
-  };
-
-  const reset = () => {
-    setName('');
-    setNumber('');
-  };
-
-  const handleFormSubmit = e => {
-    e.preventDefault();
+  const newHandleFormSubmit = newContact => {
+    const { name } = newContact.name;
 
     if (
       contacts.length !== 0 &&
@@ -50,53 +41,44 @@ export default function ContactForm() {
       )
     ) {
       alert(`${name} is already in contacts`);
-      reset();
       return;
     }
 
-    const contact = { name, number, id: nanoid() };
+    const contact = { ...newContact, id: nanoid() };
 
     dispatch(createContact(contact));
-    reset();
   };
 
-  const nameInputId = nanoid();
-  const numberInputId = nanoid();
-
   return (
-    <FormWrapper>
-      <ContactSubmitForm onSubmit={handleFormSubmit}>
-        <FormInputLabel htmlFor={nameInputId}>
-          Name
-          <FormInput
-            type="text"
-            name="name"
-            placeholder="John Wick"
-            pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-            onChange={handleChange}
-            id={nameInputId}
-            value={name}
-          />
-        </FormInputLabel>
-
-        <FormInputLabel htmlFor={numberInputId}>
-          Phone number
-          <FormInput
-            type="tel"
-            name="number"
-            placeholder="+380501234567"
-            pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-            onChange={handleChange}
-            id={numberInputId}
-            value={number}
-          />
-        </FormInputLabel>
-        <FormSubmitBtn type="submit">Add contact</FormSubmitBtn>
-      </ContactSubmitForm>
-    </FormWrapper>
+    <>
+      <FormWrapper>
+        <Formik
+          initialValues={{ name: '', number: '' }}
+          validationSchema={addContactSchema}
+          onSubmit={(values, actions) => {
+            newHandleFormSubmit(values);
+            actions.resetForm();
+          }}
+        >
+          <StyledForm>
+            <FormInputLabel>
+              Name
+              <StyledField name="name" type="text" placeholder="John Wick" />
+              <StyledErrorMessage component="div" name="name" />
+            </FormInputLabel>
+            <FormInputLabel>
+              Phone number
+              <StyledField
+                name="number"
+                type="tel"
+                placeholder="+380501234567"
+              />
+              <StyledErrorMessage component="div" name="number" />
+            </FormInputLabel>
+            <FormSubmitBtn type="submit">Add contact</FormSubmitBtn>
+          </StyledForm>
+        </Formik>
+      </FormWrapper>
+    </>
   );
 }
