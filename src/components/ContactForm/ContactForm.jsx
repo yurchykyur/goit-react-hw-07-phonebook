@@ -30,8 +30,8 @@ export default function ContactForm() {
   const contacts = useSelector(state => state.contacts);
   const dispatch = useDispatch();
 
-  const newHandleFormSubmit = newContact => {
-    const { name } = newContact.name;
+  const handleFormSubmit = (newContact, { resetForm }) => {
+    const { name } = newContact;
 
     if (
       contacts.length !== 0 &&
@@ -47,6 +47,7 @@ export default function ContactForm() {
     const contact = { ...newContact, id: nanoid() };
 
     dispatch(createContact(contact));
+    resetForm();
   };
 
   return (
@@ -55,10 +56,7 @@ export default function ContactForm() {
         <Formik
           initialValues={{ name: '', number: '' }}
           validationSchema={addContactSchema}
-          onSubmit={(values, actions) => {
-            newHandleFormSubmit(values);
-            actions.resetForm();
-          }}
+          onSubmit={handleFormSubmit}
         >
           <StyledForm>
             <FormInputLabel>
