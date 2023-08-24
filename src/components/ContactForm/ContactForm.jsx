@@ -14,6 +14,7 @@ import {
 } from './ContactForm.styled';
 
 import { createContact } from 'components/redux/contacts/contactSlice';
+import { toast } from 'react-toastify';
 
 const addContactSchema = Yup.object().shape({
   name: Yup.string()
@@ -40,7 +41,16 @@ export default function ContactForm() {
           contact.name.toLowerCase().trim() === name.toLowerCase().trim()
       )
     ) {
-      alert(`${name} is already in contacts`);
+      toast.warn(`${name} is already in contacts`, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return;
     }
 

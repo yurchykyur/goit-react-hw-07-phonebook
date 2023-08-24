@@ -8,6 +8,8 @@ import Notification from 'components/Notification';
 
 import { AppContainer, MainTitle, SecondTitle } from './App.styled';
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App() {
   const contacts = useSelector(state => state.contacts);
@@ -28,6 +30,7 @@ export default function App() {
           message={'There are no contacts in your phonebook'}
         ></Notification>
       )}
+      <ToastContainer />
     </AppContainer>
   );
 }
