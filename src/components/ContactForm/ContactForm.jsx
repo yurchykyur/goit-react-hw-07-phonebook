@@ -21,7 +21,7 @@ const addContactSchema = Yup.object().shape({
     .min(2, 'Too Short!')
     .max(70, 'Too Long!')
     .required('A name is required'),
-  number: Yup.number()
+  number: Yup.number('Please, enter a number')
     .integer("A phone number can't include a decimal point")
     .positive("A phone number can't start with a minus")
     .required('A phone number is required'),
