@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { nanoid } from 'nanoid';
 
 import {
   FormWrapper,
@@ -13,8 +12,8 @@ import {
   StyledErrorMessage,
 } from './ContactForm.styled';
 
-import { createContact } from 'components/redux/contacts/contactSlice';
-import { toast } from 'react-toastify';
+import { fetchAddContacts } from 'components/redux/contacts/contactsOperations';
+import { toastWarn } from 'service/toastify';
 
 const addContactSchema = Yup.object().shape({
   name: Yup.string()
@@ -28,7 +27,7 @@ const addContactSchema = Yup.object().shape({
 });
 
 export default function ContactForm() {
-  const contacts = useSelector(state => state.contacts);
+  const contacts = useSelector(state => state.contacts.items);
   const dispatch = useDispatch();
 
   const handleFormSubmit = (newContact, { resetForm }) => {
@@ -41,22 +40,12 @@ export default function ContactForm() {
           contact.name.toLowerCase().trim() === name.toLowerCase().trim()
       )
     ) {
-      toast.warn(`${name} is already in contacts`, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
+      toastWarn(`${name} is already in contacts`);
+
       return;
     }
 
-    const contact = { ...newContact, id: nanoid() };
-
-    dispatch(createContact(contact));
+    dispatch(fetchAddContacts(newContact));
     resetForm();
   };
 

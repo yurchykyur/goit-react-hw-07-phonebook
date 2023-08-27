@@ -20,4 +20,11 @@ const SecondTitle = styled.h2`
   color: #3498db;
 `;
 
-export { AppContainer, MainTitle, SecondTitle };
+const OvalWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-40px, -40px);
+`;
+
+export { AppContainer, MainTitle, SecondTitle, OvalWrapper };

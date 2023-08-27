@@ -2,7 +2,7 @@ import { TotalContactsText, TotalContactsNum } from './ContactAmount.styled';
 import { useSelector } from 'react-redux';
 
 export default function ContactAmount() {
-  const contacts = useSelector(state => state.contacts);
+  const contacts = useSelector(state => state.contacts.items);
 
   const contactsAmount = contacts.length;
 
