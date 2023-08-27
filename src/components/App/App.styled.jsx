@@ -21,7 +21,7 @@ const SecondTitle = styled.h2`
 `;
 
 const OvalWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-40px, -40px);
