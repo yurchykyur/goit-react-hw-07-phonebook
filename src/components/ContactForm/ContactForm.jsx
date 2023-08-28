@@ -28,6 +28,7 @@ const addContactSchema = Yup.object().shape({
 
 export default function ContactForm() {
   const contacts = useSelector(contactsSelectors.selectContacts);
+  const isLoading = useSelector(contactsSelectors.selectIsLoading);
   const dispatch = useDispatch();
 
   const handleFormSubmit = (newContact, { resetForm }) => {
@@ -72,7 +73,9 @@ export default function ContactForm() {
               />
               <StyledErrorMessage component="div" name="number" />
             </FormInputLabel>
-            <FormSubmitBtn type="submit">Add contact</FormSubmitBtn>
+            <FormSubmitBtn type="submit" disabled={isLoading}>
+              Add contact
+            </FormSubmitBtn>
           </StyledForm>
         </Formik>
       </FormWrapper>

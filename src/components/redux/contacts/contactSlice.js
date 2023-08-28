@@ -5,7 +5,11 @@ import * as contactsOperations from './contactsOperations';
 import { toastifyMessage } from 'service';
 
 const handleRejected = (state, action) => {
-  toastifyMessage.toastError('Something went wrong, please try again later');
+  console.log(action.payload.message);
+
+  toastifyMessage.toastError(
+    `${action.payload.message}.Please try again later`
+  );
   return {
     ...state,
     error: action.payload,
