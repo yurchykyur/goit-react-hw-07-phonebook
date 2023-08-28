@@ -4,10 +4,10 @@ import { nanoid } from 'nanoid';
 
 import { FilterWrapper, FilterInputLabel, FilterInput } from './Filter.styled';
 import { filterContact } from 'components/redux/filters/filterSlice';
-import { selectFilter } from 'components/redux/filters/selectors';
+import { filterSelectors } from 'components/redux/filters';
 
 export default function Filter() {
-  const filter = useSelector(selectFilter);
+  const filter = useSelector(filterSelectors.selectFilter);
   const dispatch = useDispatch();
 
   const onChangeFilter = e => {

@@ -18,15 +18,18 @@ import {
   OvalWrapper,
 } from './App.styled';
 
-import { fetchContacts } from 'components/redux/contacts/contactsOperations';
+import {
+  contactsOperations,
+  contactsSelectors,
+} from 'components/redux/contacts';
 
 export default function App() {
-  const contacts = useSelector(state => state.contacts.items);
-  const isLoading = useSelector(state => state.contacts.isLoading);
+  const contacts = useSelector(contactsSelectors.selectContacts);
+  const isLoading = useSelector(contactsSelectors.selectIsLoading);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    dispatch(contactsOperations.fetchContacts());
   }, [dispatch]);
 
   return (

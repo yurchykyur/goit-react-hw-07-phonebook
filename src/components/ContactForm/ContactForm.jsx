@@ -12,9 +12,8 @@ import {
   StyledErrorMessage,
 } from './ContactForm.styled';
 
-import { fetchAddContacts } from 'components/redux/contacts/contactsOperations';
-import { toastWarn } from 'service/toastify';
-import { selectContacts } from 'components/redux/contacts/selectors';
+import { toastifyMessage } from 'service';
+import { contactsSelectors, contactsOperations } from '../redux/contacts';
 
 const addContactSchema = Yup.object().shape({
   name: Yup.string()
@@ -28,7 +27,7 @@ const addContactSchema = Yup.object().shape({
 });
 
 export default function ContactForm() {
-  const contacts = useSelector(selectContacts);
+  const contacts = useSelector(contactsSelectors.selectContacts);
   const dispatch = useDispatch();
 
   const handleFormSubmit = (newContact, { resetForm }) => {
@@ -41,15 +40,15 @@ export default function ContactForm() {
           contact.name.toLowerCase().trim() === name.toLowerCase().trim()
       )
     ) {
-      toastWarn(`${name} is already in contacts`);
+      toastifyMessage.toastWarn(`${name} is already in contacts`);
 
       return;
     }
 
-    dispatch(fetchAddContacts(newContact));
+    dispatch(contactsOperations.fetchAddContacts(newContact));
     resetForm();
   };
-  
+
   return (
     <>
       <FormWrapper>
