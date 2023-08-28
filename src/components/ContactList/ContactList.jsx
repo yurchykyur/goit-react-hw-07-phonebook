@@ -9,26 +9,16 @@ import {
   DeleteBtn,
 } from './ContactList.styled';
 import { fetchDeleteContacts } from 'components/redux/contacts/contactsOperations';
+import { selectFilteredContacts } from 'components/redux/filters/selectors';
 
 export default function ContactList() {
-  const contacts = useSelector(state => state.contacts.items);
-  const filter = useSelector(state => state.filter);
-
   const dispatch = useDispatch();
+  const filteredContacts = useSelector(selectFilteredContacts);
 
   const deleteContacts = id => {
     dispatch(fetchDeleteContacts(id));
   };
 
-  const getFilteredContact = () => {
-    const normalizedFilterQuery = filter.toLowerCase();
-
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilterQuery)
-    );
-  };
-
-  const filteredContacts = getFilteredContact();
   return (
     <>
       <PhonebookList>
