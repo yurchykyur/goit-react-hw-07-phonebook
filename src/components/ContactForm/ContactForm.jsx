@@ -14,6 +14,7 @@ import {
 
 import { fetchAddContacts } from 'components/redux/contacts/contactsOperations';
 import { toastWarn } from 'service/toastify';
+import { selectContacts } from 'components/redux/contacts/selectors';
 
 const addContactSchema = Yup.object().shape({
   name: Yup.string()
@@ -27,7 +28,7 @@ const addContactSchema = Yup.object().shape({
 });
 
 export default function ContactForm() {
-  const contacts = useSelector(state => state.contacts.items);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const handleFormSubmit = (newContact, { resetForm }) => {
@@ -48,7 +49,7 @@ export default function ContactForm() {
     dispatch(fetchAddContacts(newContact));
     resetForm();
   };
-
+  
   return (
     <>
       <FormWrapper>
