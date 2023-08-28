@@ -8,15 +8,16 @@ import {
   ContactItemNum,
   DeleteBtn,
 } from './ContactList.styled';
-import { fetchDeleteContacts } from 'components/redux/contacts/contactsOperations';
-import { selectFilteredContacts } from 'components/redux/filters/selectors';
+
+import { contactsOperations } from 'components/redux/contacts/';
+import { filterSelectors } from 'components/redux/filters';
 
 export default function ContactList() {
   const dispatch = useDispatch();
-  const filteredContacts = useSelector(selectFilteredContacts);
+  const filteredContacts = useSelector(filterSelectors.selectFilteredContacts);
 
   const deleteContacts = id => {
-    dispatch(fetchDeleteContacts(id));
+    dispatch(contactsOperations.fetchDeleteContacts(id));
   };
 
   return (
